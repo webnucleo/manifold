@@ -27,8 +27,8 @@ export default class Splash extends Component {
           <div className="splash-50">
             <div className="left">
               <h2 className="heading-primary">
-                {'Welcome to Manifold. An Intuitive, collaborative, ' +
-                'open-source platform for scholarly publishing'}
+                {'Welcome to The Einaudi Center\'s Demo Installation of ' +
+                'Manifold Scholarship'}
               </h2>
               <p>
                 {'With iterative texts, powerful annotation tools, ' +
