@@ -22,23 +22,20 @@ export default class Splash extends Component {
 
   render() {
     return (
-      <section className="bg-accent-primary">
+      <section className="bg-accent-primary bg-accent-primary-cornell">
         <div className="container rel">
           <div className="splash-50">
             <div className="left">
               <h2 className="heading-primary">
-                {'Welcome to The Einaudi Center\'s Demo Installation of ' +
-                'Manifold Scholarship'}
+                {'Cornell Global Perspectives'}
               </h2>
               <p>
-                {'With iterative texts, powerful annotation tools, ' +
-                'rich media support, and robust community dialogue, ' +
-                'Manifold transforms scholarly publications into ' +
-                'living digital works.'}
+                {'An imprint of Cornell University Press, curated by the Mario Einaudi ' +
+                'Center for International Studies.'}
               </p>
               <nav className="buttons">
                 <a
-                  href="http://manifold.umn.edu/"
+                  href="http://einaudi.cornell.edu"
                   target="blank"
                   className="button-bare-primary"
                 >
@@ -56,9 +53,6 @@ export default class Splash extends Component {
                 }
               </nav>
             </div>
-            <figure className="right">
-              <img src="/static/images/browse-splash_manifold-devices.png" />
-            </figure>
           </div>
         </div>
       </section>

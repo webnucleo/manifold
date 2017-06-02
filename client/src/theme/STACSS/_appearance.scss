@@ -50,6 +50,22 @@
   background-color: $accentPrimary;
 }
 
+.bg-accent-primary-cornell {
+  color: #FFF;
+  background-image: url("/static/einaudi-bg-wide.jpg");
+
+  .heading-primary {
+    font-weight: bold;
+    font-size: 2.5em;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .left p {
+    font-size: 1.5em;
+  }
+}
+
 .bg-neutral05 {
   background-color: $neutral05;
 }
