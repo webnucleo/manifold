@@ -1,18 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe EventAuthorizer, :authorizer do
-  let(:user) { FactoryBot.create(:user) }
-  let(:admin) { FactoryBot.create(:user, role: Role::ROLE_ADMIN) }
+  context 'when the subject is an admin' do
+    let(:subject) { FactoryBot.create(:user, role: Role::ROLE_ADMIN) }
 
-  describe 'class authorization' do
-    context 'when deleting' do
-      it 'is true for admin' do
-        expect(EventAuthorizer).to be_deletable_by(admin)
-      end
+    abilities = { create: false, update: false, read: false, delete: true }
+    it_should_behave_like "an authorized user for a class", Event, abilities
+  end
 
-      it 'is false for user' do
-        expect(EventAuthorizer).to_not be_deletable_by(user)
-      end
-    end
+  context 'when the subject is a reader' do
+    let(:subject) { FactoryBot.create(:user) }
+
+    it_should_behave_like "an authorized user for a class", Event, none: true
   end
 end
