@@ -30,6 +30,24 @@ export default class LayoutHeader extends PureComponent {
     pages: []
   };
 
+  backendButtonLabel(props) {
+    if (!props.authentication.currentUser) return null;
+    switch (props.authentication.currentUser.attributes.kind) {
+      case "admin":
+      case "editor":
+      case "project_creator":
+      case "marketeer":
+        return "Admin Mode";
+      case "project_editor":
+      case "project_resource_editor":
+        return "Editor Mode";
+      case "project_author":
+        return "Author Mode";
+      default:
+        return null;
+    }
+  }
+
   visiblePages(props) {
     if (!props.pages) return [];
     return props.pages.filter(p => {
@@ -80,14 +98,13 @@ export default class LayoutHeader extends PureComponent {
 
           <nav className="menu-dropdowns">
             <ul>
-              <HigherOrder.RequireKind requiredKind={"admin"}>
+              <HigherOrder.RequireKind requiredKind="any">
                 <li>
                   <Link className="button-mode" to={lh.link("backend")}>
-                    Admin Mode
+                    {this.backendButtonLabel(this.props)}
                   </Link>
                 </li>
               </HigherOrder.RequireKind>
-
               {/*
                 Hiding search markup until functionality is available
                 <li>

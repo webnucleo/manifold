@@ -19,6 +19,7 @@ module Abilities
       comment: abilities_for(Comment),
       project: abilities_for(Project),
       permission: abilities_for(Permission),
+      settings: abilities_for(Settings),
       statistics: abilities_for(Statistics),
       user: abilities_for(User)
     }
