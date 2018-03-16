@@ -12,7 +12,7 @@ export default class NavigationSecondary extends Component {
 
   renderItem(link) {
     return (
-      <li key={link.key}>
+      <li>
         <NavLink exact to={link.path} activeClassName="active">
           {link.label}
         </NavLink>
@@ -25,14 +25,15 @@ export default class NavigationSecondary extends Component {
       <nav className="panel-nav">
         <ul>
           {this.props.links.map(link => {
-            if (link.kind)
+            if (link.ability)
               return (
-                <HigherOrder.RequireKind
+                <HigherOrder.RequireAbility
                   key={link.key}
-                  requiredKind={link.kind}
+                  entity={link.entity}
+                  requiredAbility={link.ability}
                 >
                   {this.renderItem(link)}
-                </HigherOrder.RequireKind>
+                </HigherOrder.RequireAbility>
               );
             return this.renderItem(link);
           })}
