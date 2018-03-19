@@ -8,6 +8,7 @@ import { select } from "utils/entityUtils";
 import { projectsAPI, requests } from "api";
 import { childRoutes } from "helpers/router";
 import lh from "helpers/linkHandler";
+import endsWith from "lodash/endsWith";
 
 const { request, flush } = entityStoreActions;
 
@@ -39,7 +40,7 @@ export class ProjectWrapperContainer extends PureComponent {
     this.handleProjectDestroy = this.handleProjectDestroy.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.fetchProject();
   }
 
@@ -190,6 +191,12 @@ export class ProjectWrapperContainer extends PureComponent {
     );
   }
 
+  maybeRedirectToResources(project) {
+    if (endsWith(this.props.location.pathname, "resources")) return null;
+    if (project.attributes.abilitiesForUser.update) return null;
+    if (project.attributes.abilitiesForUser.updateMetadata) return this.props.history.push(lh.link("backendProjectResources", project.id));
+  }
+
   renderRoutes() {
     const { project } = this.props;
     const refresh = this.fetchProject;
@@ -199,6 +206,7 @@ export class ProjectWrapperContainer extends PureComponent {
   render() {
     if (!this.props.project) return null;
     const { project } = this.props;
+    this.maybeRedirectToResources(project);
 
     return (
       <div>
