@@ -9,7 +9,8 @@ export default class SearchQuery extends PureComponent {
     initialState: PropTypes.object,
     setQueryState: PropTypes.func,
     facets: PropTypes.array,
-    scopes: PropTypes.array
+    scopes: PropTypes.array,
+    description: PropTypes.string
   };
 
   /* eslint-disable no-console */
@@ -111,6 +112,25 @@ export default class SearchQuery extends PureComponent {
     this.props.doSearch();
   };
 
+  renderFooter() {
+    if (this.props.searchType !== 'frontend' && !this.props.description) return false;
+
+    return(
+      <div className="footer">
+        {this.props.description ?
+          <div className="description">
+            {this.props.description}
+          </div> : null
+        }
+        {this.props.searchType === 'frontend' ?
+          <button type="submit" className="button-primary">
+            {'Search'}
+          </button> : null
+        }
+      </div>
+    );
+  }
+
   render() {
     const { showScopeFilter, showFacetFilter } = this.props;
 
@@ -124,11 +144,10 @@ export default class SearchQuery extends PureComponent {
             value={this.state.keyword}
             placeholder={"Search for..."}
           />
-          <button className="manicon manicon-magnify" />
+          <button type="submit" className="manicon manicon-magnify" />
         </div>
-        <div className="filters">
           {this.props.scopes.length > 0 ? (
-            <div className="filter">
+            <div className="filters">
               <label className="group-label">{"Search within:"}</label>
               <div className="checkbox-group">
                 {this.props.scopes.map((scope) => {
@@ -185,7 +204,7 @@ export default class SearchQuery extends PureComponent {
               </div>
             </div>
           ) : null}
-        </div>
+          {this.renderFooter()}
       </form>
     );
   }

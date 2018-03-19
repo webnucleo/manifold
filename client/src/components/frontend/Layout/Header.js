@@ -103,6 +103,7 @@ export default class LayoutHeader extends PureComponent {
                     keyword: "",
                     facets: ["Project", "Resource", "Text"]
                   }}
+                  description="Search accross all content and projects"
                 />
               </li>
               <li>

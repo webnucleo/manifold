@@ -11,7 +11,8 @@ export class SearchMenuBody extends PureComponent {
     match: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     visibility: PropTypes.object.isRequired,
-    searchType: PropTypes.string.isRequired
+    searchType: PropTypes.string.isRequired,
+    description: PropTypes.string
   };
 
   setQueryState = queryParams => {
@@ -60,6 +61,8 @@ export class SearchMenuBody extends PureComponent {
               facets={this.props.facets}
               initialState={this.props.initialState}
               scopes={this.props.scopes}
+              searchType={this.props.searchType}
+              description={this.props.description}
               setQueryState={this.setQueryState}
               doSearch={this.doSearch}
             />
