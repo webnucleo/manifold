@@ -8,6 +8,10 @@ import build from "test/fixtures/build";
 describe("Backend People Users List Container", () => {
   const store = build.store();
   const user = build.entity.user("1");
+  const authentication = {
+    authenticated: true,
+    currentUser: build.entity.user("2", { classAbilities: { user: { create: true } } })
+  };
 
   const component = renderer.create(
     wrapWithRouter(
@@ -21,6 +25,7 @@ describe("Backend People Users List Container", () => {
             params: {}
           }}
           route={{}}
+          authentication={authentication}
         />
       </Provider>
     )

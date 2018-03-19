@@ -7,7 +7,15 @@ import build from "test/fixtures/build";
 
 describe("Backend Project Wrapper Container", () => {
   const store = build.store();
-  const project = build.entity.project("1");
+  const project = build.entity.project("1", { abilities: { delete: true } });
+  const user = build.entity.user("2", {
+    kind: "admin",
+    classAbilities: { permission: { create: true } }
+  });
+  const authentication = {
+    authenticated: true,
+    currentUser: user
+  };
 
   const component = renderer.create(
     wrapWithRouter(
@@ -15,6 +23,8 @@ describe("Backend Project Wrapper Container", () => {
         <ProjectWrapperContainer
           project={project}
           dispatch={store.dispatch}
+          location={{ pathname: "/projects/1" }}
+          authentication={authentication}
           route={{
             routes: []
           }}
