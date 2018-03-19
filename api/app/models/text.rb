@@ -3,6 +3,8 @@ require "memoist"
 # A single Text
 class Text < ApplicationRecord
 
+  TYPEAHEAD_ATTRIBUTES = [:title, :makers].freeze
+
   # Authority
   include Authority::Abilities
 
@@ -39,6 +41,9 @@ class Text < ApplicationRecord
 
   # URLs
   friendly_id :title, use: :slugged
+
+  # Search
+  searchkick word_start: TYPEAHEAD_ATTRIBUTES, callbacks: :async
 
   # Fields
   serialize :structure_titles, Hash
@@ -80,6 +85,15 @@ class Text < ApplicationRecord
 
   # Callbacks
   after_commit :trigger_text_added_event, on: [:create, :update]
+
+  def search_data
+    {
+      title: title,
+      body: description,
+      makers: makers.map(&:name),
+      text_slug: slug
+    }
+  end
 
   def title
     main_title = if association(:titles).loaded?

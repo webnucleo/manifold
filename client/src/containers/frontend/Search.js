@@ -11,7 +11,7 @@ import lh from "helpers/linkHandler";
 const { request, flush } = entityStoreActions;
 
 class SearchContainer extends PureComponent {
-  static displayName = "Reader.SearchContainer";
+  static displayName = "Frontend.SearchContainer";
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -74,34 +74,9 @@ class SearchContainer extends PureComponent {
     this.setState(queryParams);
   };
 
-  isSectionSet() {
-    return !!this.props.match.params.sectionId;
-  }
-
-  projectId() {
-    if (!this.props.text) return null;
-    return this.props.text.relationships.project.id;
-  }
-
-  textId() {
-    if (!this.props.text) return null;
-    return this.props.text.id;
-  }
-
-  sectionId() {
-    if (!this.props.section) return null;
-    return this.props.section.id;
-  }
-
   doSearch = (page = 1) => {
     const pagination = { number: page };
     const params = Object.assign({}, this.state, { page: pagination });
-    if (this.state.scope === "project" && this.projectId())
-      params.project = this.projectId();
-    if (this.state.scope === "text" && this.textId())
-      params.text = this.textId();
-    if (this.state.scope === "section" && this.sectionId())
-      params.textSection = this.sectionId();
     if (params.facets.includes("All")) {
       params.facets = this.availableFacetValues();
     }
@@ -119,17 +94,6 @@ class SearchContainer extends PureComponent {
     );
   };
 
-  close = () => {
-    const { textId, sectionId } = this.props.match.params;
-    if (textId && sectionId) {
-      this.props.history.push(lh.link("readerSection", textId, sectionId), {
-        noScroll: true
-      });
-    } else {
-      this.props.history.push(lh.link("reader", textId), { noScroll: true });
-    }
-  };
-
   searchQueryState() {
     if (this.props.location.state)
       return this.props.location.state.searchQueryState;
@@ -142,33 +106,20 @@ class SearchContainer extends PureComponent {
 
   facets() {
     return [
-      { label: "Texts", value: "SearchableNode" },
-      { label: "Annotations", value: "Annotation" }
+      { label: "Projects", value: "Project" },
+      { label: "Resources", value: "Resource" },
+      { label: "Texts", value: "Text" },
+      { label: "Full Text", value: "SearchableNodes" }
     ];
   }
 
   scopes() {
-    const scopes = [
-      { label: "Text", value: "text" },
-      { label: "Project", value: "project" }
-    ];
-    if (this.isSectionSet()) {
-      scopes.unshift({ label: "Chapter", value: "section" })
-    }
-    return scopes;
+    return [];
   }
 
   render() {
-
     return (
-      <Overlay
-        triggerScrollToTop={this.state.searchNum}
-        closeCallback={this.close}
-        title={"Search Results"}
-        icon={"magnify"}
-        contentWidth={850}
-      >
-        <div>
+        <div className="container">
           <Search.Query.Form
             initialState={this.searchQueryState()}
             doSearch={this.doSearch}
@@ -184,7 +135,6 @@ class SearchContainer extends PureComponent {
             />
           ) : null}
         </div>
-      </Overlay>
     );
   }
 }

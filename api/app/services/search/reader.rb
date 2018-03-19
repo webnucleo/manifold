@@ -75,8 +75,11 @@ module Search
 
     def search_indexes
       indexes = []
-      indexes.push SearchableNode if (facets & %w[SearchableNode All]).present?
-      indexes.push Annotation if (facets & %w[Annotation All]).present?
+      indexes.push Project if (facets & %w[Project]).present?
+      indexes.push Resource if (facets & %w[Resource]).present?
+      indexes.push Text if (facets & %w[Text]).present?
+      indexes.push SearchableNode if (facets & %w[SearchableNode]).present?
+      indexes.push Annotation if (facets & %w[Annotation]).present?
       indexes
     end
 

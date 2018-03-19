@@ -1,23 +1,21 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-
+import difference from "lodash/difference"
 export default class SearchQuery extends PureComponent {
   static displayName = "Search.Query";
 
   static propTypes = {
-    showScopeFilter: PropTypes.bool.isRequired,
-    includeSection: PropTypes.bool.isRequired,
-    showFacetFilter: PropTypes.bool.isRequired,
     doSearch: PropTypes.func.isRequired,
     initialState: PropTypes.object,
-    setQueryState: PropTypes.func
+    setQueryState: PropTypes.func,
+    facets: PropTypes.array,
+    scopes: PropTypes.array
   };
 
   /* eslint-disable no-console */
   static defaultProps = {
-    showScopeFilter: true,
-    showFacetFilter: false,
-    includeSection: false,
+    facets: [],
+    scopes: [],
     doSearch: state => {
       console.warn("The SearchQuery component expects an doSearch callback.");
       console.warn("Current SearchQuery State");
@@ -129,57 +127,34 @@ export default class SearchQuery extends PureComponent {
           <button className="manicon manicon-magnify" />
         </div>
         <div className="filters">
-          {showScopeFilter ? (
+          {this.props.scopes.length > 0 ? (
             <div className="filter">
               <label className="group-label">{"Search within:"}</label>
               <div className="checkbox-group">
-                {this.props.includeSection ? (
-                  <label className="checkbox">
-                    <input
-                      type="checkbox"
-                      checked={this.state.scope === "section"}
-                      onChange={this.makeScopeHandler("section")}
-                    />
-                    {/* Fake control to allow for custom checkbox styles */}
-                    <div className="control-indicator">
-                      <i className="manicon manicon-check" />
-                    </div>
-                    {"Chapter"}
-                  </label>
-                ) : null}
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={this.state.scope === "text"}
-                    onChange={this.makeScopeHandler("text")}
-                  />
-                  {/* Fake control to allow for custom checkbox styles */}
-                  <div className="control-indicator">
-                    <i className="manicon manicon-check" />
-                  </div>
-                  {"Text"}
-                </label>
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={this.state.scope === "project"}
-                    onChange={this.makeScopeHandler("project")}
-                  />
-                  {/* Fake control to allow for custom checkbox styles */}
-                  <div className="control-indicator">
-                    <i className="manicon manicon-check" />
-                  </div>
-                  {"Project"}
-                </label>
+                {this.props.scopes.map((scope) => {
+                  return (
+                    <label key={scope.value} className="checkbox">
+                      <input
+                        type="checkbox"
+                        checked={this.state.scope === scope.value}
+                        onChange={this.makeScopeHandler(scope.value)}
+                      />
+                      <div className="control-indicator">
+                        <i className="manicon manicon-check" />
+                      </div>
+                      {scope.label}
+                    </label>
+                  );
+                })}
               </div>
             </div>
           ) : null}
 
-          {showFacetFilter ? (
+          {this.props.facets.length > 0 ? (
             <div className="filter">
               <label className="group-label">{"Show Results For:"}</label>
               <div className="checkbox-group">
-                <label className="checkbox">
+                <label key={"all"} className="checkbox">
                   <input
                     type="checkbox"
                     checked={this.existsInState("facets", "All")}
@@ -189,32 +164,24 @@ export default class SearchQuery extends PureComponent {
                   <div className="control-indicator">
                     <i className="manicon manicon-check" />
                   </div>
-                  {"Everything"}
+                  {'Everything'}
                 </label>
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={this.existsInState("facets", "SearchableNode")}
-                    onChange={this.makeFacetHandler("facets", "SearchableNode")}
-                  />
-                  {/* Fake control to allow for custom checkbox styles */}
-                  <div className="control-indicator">
-                    <i className="manicon manicon-check" />
-                  </div>
-                  {"Texts"}
-                </label>
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={this.existsInState("facets", "Annotation")}
-                    onChange={this.makeFacetHandler("facets", "Annotation")}
-                  />
-                  {/* Fake control to allow for custom checkbox styles */}
-                  <div className="control-indicator">
-                    <i className="manicon manicon-check" />
-                  </div>
-                  {"Annotations"}
-                </label>
+                {this.props.facets.map((facet) => {
+                  return (
+                    <label key={facet.value} className="checkbox">
+                      <input
+                        type="checkbox"
+                        checked={this.existsInState("facets", facet.value)}
+                        onChange={this.makeFacetHandler("facets", facet.value)}
+                      />
+                      {/* Fake control to allow for custom checkbox styles */}
+                      <div className="control-indicator">
+                        <i className="manicon manicon-check" />
+                      </div>
+                      {facet.label}
+                    </label>
+                  );
+                })}
               </div>
             </div>
           ) : null}

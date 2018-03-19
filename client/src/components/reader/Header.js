@@ -5,14 +5,14 @@ import {
   ReturnMenu,
   TextTitles,
   Notes,
-  Search,
   ControlMenu
 } from "components/reader";
 import {
   UIPanel,
   UserMenuButton,
   UserMenuBody,
-  HeaderNotifications
+  HeaderNotifications,
+  Search
 } from "components/global";
 import { HigherOrder } from "containers/global";
 import memoize from "lodash/memoize";
@@ -132,7 +132,7 @@ export default class Header extends Component {
                 />
               </li>
               <li>
-                <Search.Button
+                <Search.Menu.Button
                   toggleSearchMenu={this.panelToggleHandler("search")}
                   active={this.props.visibility.uiPanels.search}
                 />
@@ -187,7 +187,18 @@ export default class Header extends Component {
             id="search"
             visibility={this.props.visibility.uiPanels}
             toggleVisibility={this.panelToggleHandler("search")}
-            bodyComponent={Search.Menu}
+            scopes={[
+              { label: "Chapter", value: "section" },
+              { label: "Text", value: "text" },
+              { label: "Project", value: "project" }
+            ]}
+            initialState={{
+              keyword: "",
+              scope: "text",
+              facets: ["SearchableNode", "Annotation"]
+            }}
+            searchType="reader"
+            bodyComponent={Search.Menu.Body}
           />
           <UIPanel
             id="appearance"
